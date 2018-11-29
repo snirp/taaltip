@@ -3,17 +3,19 @@ import App from './App.vue'
 import router from './router'
 import tiplijst from './assets/tiplijst';
 
-import VueResource from 'vue-resource'
-Vue.use(VueResource)
-Vue.http.options.root = './static/'
-
 // import { yaml } from 'yaml-js' 
 
-Vue.http.get('tiplijst.yaml')
-  .then(response => {
-    console.log(response)
-  })
-
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.taalhulp123.nl/yaml/tiplijst.yaml');
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    console.log(xhr.responseText);
+  }
+  else {
+    console.log('Request failed.  Returned status of ' + xhr.status);
+  }
+};
+xhr.send();
 
 Vue.config.productionTip = false;
 Vue.prototype.$tiplijst = tiplijst;

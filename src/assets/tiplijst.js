@@ -122,15 +122,15 @@ export default {
     intro: `Hoe om te gaan met Engelse leenwoorden? Deze taaltip legt de verschillende regels uit voor 
             Engelse zelfstandige naamwoorden en werkwoorden.`,
     voorbeeld: [
-      `Ik ben `,
+      `Jij raakt altijd `,
       {
         fout: `gestresst`,
         goed: `gestrest`
       },
-      ` als het eten aangebrandt, wanneer ik `,
+      `, wanneer je een steak `,
       {
-        fout: `gril`,
-        goed: `grill`
+        fout: `grillt`,
+        goed: `grilt`
       },
       `.`,
     ],
