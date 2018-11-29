@@ -3,6 +3,18 @@ import App from './App.vue'
 import router from './router'
 import tiplijst from './assets/tiplijst';
 
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
+Vue.http.options.root = './static/'
+
+// import { yaml } from 'yaml-js' 
+
+Vue.http.get('tiplijst.yaml')
+  .then(response => {
+    console.log(response)
+  })
+
+
 Vue.config.productionTip = false;
 Vue.prototype.$tiplijst = tiplijst;
 Vue.prototype.$catlijst = {
