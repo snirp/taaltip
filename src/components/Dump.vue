@@ -21,7 +21,12 @@
 </template>
 
 <script>
+import { data } from '../main'
+
 export default {
+  data() {
+    return data
+  },
   methods: {
     makeTwig () {
       // const yyyymmdd = function(myDate){
@@ -36,13 +41,13 @@ export default {
       //   }
       //   return(year+'-' + month + '-'+dt);
       // }
-      const ids = Object.keys(this.$tiplijst).sort( (a,b) => this.$tiplijst[b].datum - this.$tiplijst[a].datum)
+      const ids = Object.keys(this.tiplijst).sort( (a,b) => this.tiplijst[b].datum - this.tiplijst[a].datum)
       const twig = []
       for (let id of ids){
         twig.push({
-          "title": this.$tiplijst[id].title,
+          "title": this.tiplijst[id].title,
           "id": id,
-          "date": this.yyyymmdd(this.$tiplijst[id].datum),
+          "date": this.yyyymmdd(this.tiplijst[id].datum),
         })
       }
       return twig
@@ -60,11 +65,11 @@ export default {
       return(year+'-' + month + '-'+dt);
     },
     makeGoogle () {
-      const ids = Object.keys(this.$tiplijst);
+      const ids = Object.keys(this.tiplijst);
       let result = "";
       for (let id of ids){
         result += `
-        array("${id}", "${this.yyyymmdd(this.$tiplijst[id].datum)}"),`
+        array("${id}", "${this.yyyymmdd(this.tiplijst[id].datum)}"),`
       }
       return result
     }

@@ -1,35 +1,53 @@
 import Vue from 'vue'
+import yaml from 'yaml-js'
+import vueHeadful from 'vue-headful'; 
+
 import App from './App.vue'
 import router from './router'
-import tiplijst from './assets/tiplijst';
+import catlijst from './assets/catlijst';
 
-Vue.config.productionTip = false;
-Vue.prototype.$tiplijst = tiplijst;
-Vue.prototype.$catlijst = {
-  spelling: {
-    kleur: "#009de3",
-    link: "https://www.taalhulp123.nl/spellinghulp123",
-    naam: "Spellinghulp123"
-  },
-  stijl: {
-    kleur: "#417635",
-    link: "https://www.taalhulp123.nl/stijlhulp123",
-    naam: "Stijlhulp123"
-  },
-  werkwoord: {
-    kleur: "#754494",
-    link: "https://www.taalhulp123.nl/werkwoordenhulp123",
-    naam: "Werkwoordenhulp123"
+Vue.component('vue-headful', vueHeadful);
+
+// Global state object
+export const data = {
+  loading: true,
+  tiplijst: {},
+  testdata: false,
+  animationStart: true,
+  showModal: true,
+  catFilter: "",
+  orderBy: "datum",  // "datum" of "title"
+  orderUp: false,
+}
+
+// Make categories available as static data
+Vue.prototype.$catlijst = catlijst;
+
+let datasource;
+
+if (window.location.href.toLowerCase().indexOf('taaltip') !== -1){
+  // if path contains "taalhulp", load production dataset
+  datasource = 'https://raw.githubusercontent.com/taalhulp/tiplijst/master/tiplijst.yaml';
+} else {
+  // else load the dataset from the test branch
+  console.log("NOT ON taaltip PAGE, WORKING WITH TEST DATASET")
+  data.testdata = true
+  datasource = 'https://raw.githubusercontent.com/taalhulp/tiplijst/test/tiplijst.yaml';
+}
+
+const xhr = new XMLHttpRequest();
+xhr.open('GET', datasource);
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    data.tiplijst = yaml.load(xhr.responseText);
+    data.loading = false;
+  }
+  else {
+    console.log('Request failed.');
   }
 };
+xhr.send();
 
-router.beforeEach((to, from, next) => {
-  const id = to.params.id;
-  if (tiplijst[id]){
-    document.title = `taaltip: ${tiplijst[id].title} | taalhulp123.nl`;
-  }
-  next();
-})
 
 new Vue({
   router,

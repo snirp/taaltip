@@ -43,18 +43,18 @@ import IconBase from '../IconBase'
 import IconFacebook from '../icons/IconFacebook'
 import IconTwitter from '../icons/IconTwitter'
 import IconReplay from '../icons/IconReplay'
+import { data } from '../../main'
 
 export default {
-  data: function() {
-    return {
-      animationStart: true,
-    }
+  data() {
+    return data
   },
   props: {
     tip: Object,
   },
   methods: {
     replay () {
+      // reset animation classes through state change
       this.animationStart = false;
       setTimeout(() => {
         this.animationStart = true;
