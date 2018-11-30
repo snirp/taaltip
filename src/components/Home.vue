@@ -1,7 +1,9 @@
 <template>
   <div class="bevatter">
+    <div v-if="testdata" :style="{backgroundColor: 'lemonchiffon', textAlign: 'center', padding: '4px', marginBottom: '10px'}">
+      De test-dataset is geladen voor deze url
+    </div>
     <div v-if="loading" class="loader">
-      <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
       <svg width="80" height="80" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="#444">
           <g fill="none" fill-rule="evenodd" stroke-width="2">
               <circle cx="22" cy="22" r="1">

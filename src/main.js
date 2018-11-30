@@ -7,25 +7,35 @@ import router from './router'
 import catlijst from './assets/catlijst';
 
 Vue.component('vue-headful', vueHeadful);
-// Vue.config.productionTip = false;
 
 // Global state object
 export const data = {
   loading: true,
   tiplijst: {},
+  testdata: false,
 }
 
-// TODO: choose datasource based on environment or compilation
-// const datasource = 'https://www.taalhulp123.nl/yaml/tiplijst.yaml'; 
-const datasource = 'http://127.0.0.1:3000/test.yaml';
+// Make categories available as static data
+Vue.prototype.$catlijst = catlijst;
+
+let datasource;
+
+if (window.location.href.toLowerCase().indexOf('taaltip') !== -1){
+  // if path contains "taalhulp", load production dataset
+  datasource = 'https://raw.githubusercontent.com/taalhulp/tiplijst/master/tiplijst.yaml';
+} else {
+  // else load the dataset from the test branch
+  console.log("NOT ON taaltip PAGE, WORKING WITH TEST DATASET")
+  data.testdata = true
+  datasource = 'https://raw.githubusercontent.com/taalhulp/tiplijst/test/tiplijst.yaml';
+}
+
 const xhr = new XMLHttpRequest();
 xhr.open('GET', datasource);
 xhr.onload = function() {
   if (xhr.status === 200) {
-    setTimeout( ()=> {
     data.tiplijst = yaml.load(xhr.responseText);
     data.loading = false;
-    }, 2000)
   }
   else {
     console.log('Request failed.');
@@ -33,8 +43,6 @@ xhr.onload = function() {
 };
 xhr.send();
 
-// Make categories available as static data
-Vue.prototype.$catlijst = catlijst;
 
 new Vue({
   router,
