@@ -55,13 +55,10 @@ export default {
   methods: {
     replay () {
       // reset animation classes through state change
-      console.log(this.animationStart)
       this.animationStart = false;
-      console.log(this.animationStart)
       setTimeout(() => {
         this.animationStart = true;
-        console.log(this.animationStart)
-      }, 300)
+      }, 30)
     }
   },
   components: { Hintlijst, IconBase, IconFacebook, IconTwitter, IconReplay }
