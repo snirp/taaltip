@@ -46,20 +46,22 @@ import IconReplay from '../icons/IconReplay'
 import { data } from '../../main'
 
 export default {
-  data () {
-    return Object.assign(data,{
-      animationStart: true,
-    })
+  data() {
+    return data
   },
   props: {
     tip: Object,
   },
   methods: {
     replay () {
+      // reset animation classes through state change
+      console.log(this.animationStart)
       this.animationStart = false;
+      console.log(this.animationStart)
       setTimeout(() => {
         this.animationStart = true;
-      }, 30)
+        console.log(this.animationStart)
+      }, 300)
     }
   },
   components: { Hintlijst, IconBase, IconFacebook, IconTwitter, IconReplay }

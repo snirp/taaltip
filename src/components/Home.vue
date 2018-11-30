@@ -103,12 +103,7 @@ export default {
     id: String
   },
   data() {
-    return Object.assign(data, {
-      showModal: true,
-      catFilter: "",
-      orderBy: "datum",  // "datum" of "title"
-      orderUp: false,
-    })
+    return data
   },
   methods: {
     prepareSortParams(a,b){

@@ -13,6 +13,11 @@ export const data = {
   loading: true,
   tiplijst: {},
   testdata: false,
+  animationStart: true,
+  showModal: true,
+  catFilter: "",
+  orderBy: "datum",  // "datum" of "title"
+  orderUp: false,
 }
 
 // Make categories available as static data
