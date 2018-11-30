@@ -1,54 +1,97 @@
 <template>
   <div class="bevatter">
-    <div class="menu-bar">
-      <div class="filter-menu">
-        <div 
-          v-for="(val, key) in this.$catlijst" 
-          :key="key" 
-          :style="{backgroundColor: val.kleur}"
-          class="filter-button"
-          :class="{'active-filter': catFilter == key}"
-          @click="catFilter = catFilter == key ? '': key">
-          {{ key }}
-        </div>
-      </div>
-      <div class="info-menu hidden-xs hidden-sm">
-        <span v-if="catFilter">{{tiplijstFilterCat().length}} van </span>
-        {{ Object.keys(this.$tiplijst).length }} taaltips
-      </div>
-      <div class="order-menu">
-        <div 
-          v-for="choice in [
-              { prop: 'title', display:'Titel' }, 
-              { prop: 'datum', display: 'Datum' },
-            ]" 
-            class="order-option"
-            :class="{'active-order': choice.prop == orderBy}"
-            :key="choice.prop"
-            @click="orderBy = choice.prop">
-          {{choice.display}}
-        </div>
-        <div class="up-down" @click="orderUp = !orderUp">
-          <span v-if="orderUp">&uarr;</span>
-          <span v-else>&darr;</span>
-        </div>
-      </div>
+    <div v-if="loading" class="loader">
+      <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+      <svg width="80" height="80" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="#444">
+          <g fill="none" fill-rule="evenodd" stroke-width="2">
+              <circle cx="22" cy="22" r="1">
+                  <animate attributeName="r"
+                      begin="0s" dur="1.8s"
+                      values="1; 20"
+                      calcMode="spline"
+                      keyTimes="0; 1"
+                      keySplines="0.165, 0.84, 0.44, 1"
+                      repeatCount="indefinite" />
+                  <animate attributeName="stroke-opacity"
+                      begin="0s" dur="1.8s"
+                      values="1; 0"
+                      calcMode="spline"
+                      keyTimes="0; 1"
+                      keySplines="0.3, 0.61, 0.355, 1"
+                      repeatCount="indefinite" />
+              </circle>
+              <circle cx="22" cy="22" r="1">
+                  <animate attributeName="r"
+                      begin="-0.9s" dur="1.8s"
+                      values="1; 20"
+                      calcMode="spline"
+                      keyTimes="0; 1"
+                      keySplines="0.165, 0.84, 0.44, 1"
+                      repeatCount="indefinite" />
+                  <animate attributeName="stroke-opacity"
+                      begin="-0.9s" dur="1.8s"
+                      values="1; 0"
+                      calcMode="spline"
+                      keyTimes="0; 1"
+                      keySplines="0.3, 0.61, 0.355, 1"
+                      repeatCount="indefinite" />
+              </circle>
+          </g>
+      </svg>
     </div>
-    <ul>
-      <Tiplink
-        v-for="id in tiplijstSort(tiplijstFilterCat())"
-        :key="id"
-        :id="id"
-        @click.native="showModal = true"
-      />
-    </ul>
-    <Modal v-if="showModal && id" @close="showModal = false">
-      <Tip :tip="this.$tiplijst[id]" />
-    </Modal>
+    <div v-else>
+      <vue-headful :title="(tiplijst[id] ? tiplijst[id].title : 'Taaltip') + ' | taalhulp123.nl'"/>
+      <div class="menu-bar">
+        <div class="filter-menu">
+          <div 
+            v-for="(val, key) in this.$catlijst" 
+            :key="key" 
+            :style="{backgroundColor: val.kleur}"
+            class="filter-button"
+            :class="{'active-filter': catFilter == key}"
+            @click="catFilter = catFilter == key ? '': key">
+            {{ key }}
+          </div>
+        </div>
+        <div class="info-menu hidden-xs hidden-sm">
+          <span v-if="catFilter">{{ tiplijstFilterCat().length }} van </span>
+          {{ Object.keys(tiplijst).length }} taaltips
+        </div>
+        <div class="order-menu">
+          <div 
+            v-for="choice in [
+                { prop: 'title', display: 'Titel' }, 
+                { prop: 'datum', display: 'Datum' },
+              ]" 
+              class="order-option"
+              :class="{'active-order': choice.prop == orderBy}"
+              :key="choice.prop"
+              @click="orderBy = choice.prop">
+            {{ choice.display }}
+          </div>
+          <div class="up-down" @click="orderUp = !orderUp">
+            <span v-if="orderUp">&uarr;</span>
+            <span v-else>&darr;</span>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <Tiplink
+          v-for="id in tiplijstSort(tiplijstFilterCat())"
+          :key="id"
+          :id="id"
+          @click.native="showModal = true"
+        />
+      </ul>
+      <Modal v-if="showModal && id" @close="showModal = false">
+        <Tip :tip="tiplijst[id]" />
+      </Modal>
+    </div>
   </div>
 </template>
 
 <script>
+import { data } from '../main'
 import Tiplink from './Tiplink'
 import Modal from './Modal'
 import Tip from './Tip'
@@ -57,18 +100,18 @@ export default {
   props: {
     id: String
   },
-  data: function() {
-    return {
+  data() {
+    return Object.assign(data, {
       showModal: true,
       catFilter: "",
-      orderBy: "datum",  // datum of title
+      orderBy: "datum",  // "datum" of "title"
       orderUp: false,
-    }
+    })
   },
   methods: {
     prepareSortParams(a,b){
-      a = this.$tiplijst[a][this.orderBy];
-      b = this.$tiplijst[b][this.orderBy];
+      a = this.tiplijst[a][this.orderBy];
+      b = this.tiplijst[b][this.orderBy];
       if (typeof(a) == "string") {
         a = a.toLowerCase();
         b = b.toLowerCase();
@@ -83,18 +126,14 @@ export default {
       [a ,b] = this.prepareSortParams(a,b)
       return a > b ? -1 : b > a ? 1 : 0;
     },
-    tiplijstSort(keys=Object.keys(this.$tiplijst)){
-      if (this.orderUp) {
-        return keys.sort(this.sortUp)
-      } else {
-        return keys.sort(this.sortDown)
-      }
+    tiplijstSort(keys=Object.keys(this.tiplijst)){
+      return this.orderUp ? keys.sort(this.sortUp) : keys.sort(this.sortDown)
     },
     tiplijstFilterCat(){
       if (this.catFilter) {
-        return Object.keys(this.$tiplijst).filter((key)=>this.$tiplijst[key].cat == this.catFilter)
+        return Object.keys(this.tiplijst).filter((key)=>this.tiplijst[key].cat == this.catFilter)
       } else {
-        return Object.keys(this.$tiplijst)
+        return Object.keys(this.tiplijst)
       }
     }
   },
@@ -105,6 +144,11 @@ export default {
 <style scoped>
 .bevatter {
   margin: 50px 0 30px;
+}
+
+.loader {
+  text-align: center;
+  padding-top: 50px;
 }
 
 ul {

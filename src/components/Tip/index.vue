@@ -43,12 +43,13 @@ import IconBase from '../IconBase'
 import IconFacebook from '../icons/IconFacebook'
 import IconTwitter from '../icons/IconTwitter'
 import IconReplay from '../icons/IconReplay'
+import { data } from '../../main'
 
 export default {
-  data: function() {
-    return {
+  data () {
+    return Object.assign(data,{
       animationStart: true,
-    }
+    })
   },
   props: {
     tip: Object,

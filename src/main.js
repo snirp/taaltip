@@ -1,49 +1,40 @@
 import Vue from 'vue'
+import yaml from 'yaml-js'
+import vueHeadful from 'vue-headful'; 
+
 import App from './App.vue'
 import router from './router'
-import tiplijst from './assets/tiplijst';
+import catlijst from './assets/catlijst';
 
-// import { yaml } from 'yaml-js' 
+Vue.component('vue-headful', vueHeadful);
+// Vue.config.productionTip = false;
 
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'https://www.taalhulp123.nl/yaml/tiplijst.yaml');
+// Global state object
+export const data = {
+  loading: true,
+  tiplijst: {},
+}
+
+// TODO: choose datasource based on environment or compilation
+// const datasource = 'https://www.taalhulp123.nl/yaml/tiplijst.yaml'; 
+const datasource = 'http://127.0.0.1:3000/test.yaml';
+const xhr = new XMLHttpRequest();
+xhr.open('GET', datasource);
 xhr.onload = function() {
   if (xhr.status === 200) {
-    console.log(xhr.responseText);
+    setTimeout( ()=> {
+    data.tiplijst = yaml.load(xhr.responseText);
+    data.loading = false;
+    }, 2000)
   }
   else {
-    console.log('Request failed.  Returned status of ' + xhr.status);
+    console.log('Request failed.');
   }
 };
 xhr.send();
 
-Vue.config.productionTip = false;
-Vue.prototype.$tiplijst = tiplijst;
-Vue.prototype.$catlijst = {
-  spelling: {
-    kleur: "#009de3",
-    link: "https://www.taalhulp123.nl/spellinghulp123",
-    naam: "Spellinghulp123"
-  },
-  stijl: {
-    kleur: "#417635",
-    link: "https://www.taalhulp123.nl/stijlhulp123",
-    naam: "Stijlhulp123"
-  },
-  werkwoord: {
-    kleur: "#754494",
-    link: "https://www.taalhulp123.nl/werkwoordenhulp123",
-    naam: "Werkwoordenhulp123"
-  }
-};
-
-router.beforeEach((to, from, next) => {
-  const id = to.params.id;
-  if (tiplijst[id]){
-    document.title = `taaltip: ${tiplijst[id].title} | taalhulp123.nl`;
-  }
-  next();
-})
+// Make categories available as static data
+Vue.prototype.$catlijst = catlijst;
 
 new Vue({
   router,

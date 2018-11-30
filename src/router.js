@@ -11,8 +11,7 @@ export default new Router({
       path: '/dump',
       name: 'dump',
       component: Dump,
-    },
-    {
+    },{
       path: '/:id?',
       name: 'home',
       component: Home,

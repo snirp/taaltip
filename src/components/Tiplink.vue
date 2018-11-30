@@ -2,22 +2,25 @@
   <li>
     <router-link :to="{ name: 'home', params: { id: id }}">
 
-      <h3>{{ this.$tiplijst[id].title }}</h3>
-      <p class="narrower">{{ this.$tiplijst[id].intro }}</p>
+      <h3>{{ tiplijst[id].title }}</h3>
+      <p class="narrower">{{ tiplijst[id].intro }}</p>
       <div class="tags">
         <div class="datum-tag">
           <small>
-          {{ this.$tiplijst[id].datum.toLocaleDateString("nl-NL") }}
+          {{ tiplijst[id].datum.toLocaleDateString("nl-NL") }}
           </small>
         </div>
-        <div class="cat-tag" :style="{backgroundColor: this.$catlijst[this.$tiplijst[id].cat].kleur}"></div>
+        <div class="cat-tag" :style="{backgroundColor: this.$catlijst[tiplijst[id].cat].kleur}"></div>
       </div>
     </router-link>
   </li>
 </template>
 
 <script>
+import { data } from '../main'
+
 export default {
+  data () { return data },
   props: {
     id: String,
   },
