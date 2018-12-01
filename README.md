@@ -1,5 +1,7 @@
 # taaltip
 
+Vue app for use in taalhulp123.nl/taaltip website. It loads segments from a YAML source and displays them as a sortable and filterable collection. They can be opened in a modal window and play an animation.
+
 ## Project setup
 ```
 npm install
@@ -15,15 +17,6 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
+## Sitemap integration
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+The main website is built on Opencart and provides an HTML sitemap for users and an XML sitemap for Google. This app prepares code snippets for pasting into those sitemaps on the following URL: https://www.taalhulp123.nl/taaltip#/dump
