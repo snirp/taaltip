@@ -19,7 +19,7 @@
           </IconBase>
         </a>
       </div>
-      <div class="zin"><span v-for="(section, index) in tip.voorbeeld" :key="index"><span v-if="typeof section == 'string'">{{ section }}</span><span v-else class="goed-fout"><span class="fout" :class="{'fout-weg': animationStart}">{{ section.fout }}</span><span class="goed hyde" :class="{'goed-verschijn': animationStart}">{{ section.goed }}</span></span></span></div>
+      <div class="zin"><span v-for="(section, index) in tip.voorbeeld" :key="index"><span v-if="typeof section == 'string'">{{ section }}</span><span v-else class="goed-fout"><span class="goed hyde" :class="{'goed-verschijn': animationStart}">{{ section.goed }}</span><span class="fout" :class="{'fout-weg': animationStart}">{{ section.fout }}</span><span class="fout-spacer">{{ section.fout }}</span></span></span></div>
     </div>
 
     <Hintlijst :hints="tip.hints" />
@@ -131,6 +131,7 @@ button:active {
 
 .zin {
   padding: 0 20px 40px;
+  line-height: 1.9;
 }
 
 .uitleg {
@@ -148,21 +149,34 @@ button:active {
   height: 0;
 }
 
+.fout-spacer {
+  height: 0;
+  opacity: 0;
+}
+
 .hyde {
   opacity: 0;
 }
 
 .fout-weg {
-  animation: flash-red 1s 0.25s 2, disappear 1.5s 2s forwards;
+  animation: flash-red 1s 0.5s 2, slide-shrink 1.5s 2s forwards;
 }
 
 .goed-verschijn {
-  animation: appear 1.5s 3.25s forwards, flash-green 1.5s 4.5s;
+  animation: appear 1.25s 2.5s forwards, flash-green 2s 3s;
 }
 
-@keyframes disappear {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes slide-shrink {
+  0% {
+    margin-top: 0;
+    font-size: 1em;
+    opacity: 1;
+  }
+  100% {
+    margin-top: -20px;
+    font-size: 0.5em;
+    opacity: 0.6;
+  }
 }
 
 @keyframes appear {
