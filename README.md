@@ -17,6 +17,12 @@ npm run serve
 npm run build
 ```
 
+### FTP location
+
+```
+/var/www/taalhulp123.nl/html/www/catalog/view/theme/thulp/taaltip/
+```
+
 ## Sitemap integration
 
 The main website is built on Opencart and provides an HTML sitemap for users and an XML sitemap for Google. This app prepares code snippets for pasting into those sitemaps on the following URL: https://www.taalhulp123.nl/taaltip#/dump
